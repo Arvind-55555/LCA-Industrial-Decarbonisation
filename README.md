@@ -349,7 +349,7 @@ See [docs/VISUALIZATION_GUIDE.md](docs/VISUALIZATION_GUIDE.md) for detailed visu
 ## Live Dashboard
 
 **Access the live dashboard on GitHub Pages:**
-🔗 **https://arvind-55555.github.io/LCA-Industrial-Decarbonisation**
+🔗 [Dashboard](https://arvind-55555.github.io/LCA-Industrial-Decarbonisation/)
 
 The dashboard is automatically deployed when changes are pushed to the `main` branch.
 
