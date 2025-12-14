@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  lca-api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LOG_LEVEL=INFO
+    volumes:
+      - ../data:/app/data
+      - ../models:/app/models
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  dashboard:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    command: python -m lca_optimizer.visualization.dashboard run_dashboard
+    ports:
+      - "8050:8050"
+    environment:
+      - PORT=8050
+    volumes:
+      - ../data:/app/data
+    depends_on:
+      - lca-api
+    restart: unless-stopped
+

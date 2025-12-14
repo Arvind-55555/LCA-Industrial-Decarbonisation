@@ -1,0 +1,13 @@
+# Optional Requirements for Advanced Features
+# Install these separately if you need specific functionality
+
+# Physics-Informed ML (requires Python <3.12)
+# deepxde>=1.9.0
+
+# NVIDIA Modulus (requires NVIDIA GPU and specific setup)
+# Install from: https://github.com/NVIDIA/modulus
+# modulus>=22.09.0
+
+# For older pandas-profiling (if ydata-profiling doesn't work)
+# pandas-profiling>=3.6.0
+

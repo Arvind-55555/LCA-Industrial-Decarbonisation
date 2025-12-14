@@ -1,0 +1,93 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Environment variables
+.env
+.env.local
+
+# Data files (keep structure, ignore data)
+data/raw/*.csv
+data/raw/*.xlsx
+data/raw/*.json
+data/processed/
+data/cache/
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+!data/raw/.gitkeep
+!data/sample/.gitkeep
+
+# Model files (keep structure, ignore large files)
+models/trained/*.pt
+models/trained/*.pth
+models/trained/*.ckpt
+!models/trained/.gitkeep
+
+# Logs
+logs/
+*.log
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Outputs (keep structure, ignore generated files)
+outputs/plots/*.png
+outputs/plots/*.jpg
+outputs/reports/*.html
+!outputs/plots/.gitkeep
+!outputs/reports/.gitkeep
+
+# Documentation
+docs/_build/
+# Allow static dashboard for GitHub Pages
+!docs/index.html
+!docs/.nojekyll
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+config/secrets.yaml
+*.pdf
+
