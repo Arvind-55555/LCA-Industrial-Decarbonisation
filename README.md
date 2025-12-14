@@ -9,7 +9,7 @@ An advanced AI-driven system that dynamically models, optimizes, and validates l
 ## Key Features
 
 - **ML-Enhanced LCA Calculations**: Physics-Informed Neural Networks (PINN) and Transformer models integrated for improved accuracy
-- **⚡ Real-Time Grid Integration**: Dynamic carbon intensity tracking with historical data analysis (7d, 30d, 1y, 3y, 5y)
+- **Real-Time Grid Integration**: Dynamic carbon intensity tracking with historical data analysis (7d, 30d, 1y, 3y, 5y)
 - **Sector-Specific Optimizers**: Specialized models for steel, cement, shipping, aluminium, and more
 - **Interactive Visualization Dashboard**: Comprehensive dashboards with ML-enhanced results and improvement opportunities
 - **Physics-Informed**: Ensures all predictions respect mass/energy balance and stoichiometric constraints
