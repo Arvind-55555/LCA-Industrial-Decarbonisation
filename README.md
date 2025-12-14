@@ -145,7 +145,7 @@ See `requirements-optional.txt` for details.
 
 **Note**: The core functionality works without these optional dependencies. The ML models (PINN and Transformer) use PyTorch directly and are fully functional out of the box.
 
-## 💻 Usage
+## Usage
 
 ### Complete ML-Enhanced Workflow (Recommended)
 
@@ -346,7 +346,7 @@ See [docs/VISUALIZATION_GUIDE.md](docs/VISUALIZATION_GUIDE.md) for detailed visu
 - **Production Deployment**: Deploy API to cloud infrastructure
 - **Model Serving**: Set up model inference service
 
-## 🌐 Live Dashboard
+## Live Dashboard
 
 **Access the live dashboard on GitHub Pages:**
 🔗 **https://arvind-55555.github.io/LCA-Industrial-Decarbonisation**
