@@ -19,9 +19,11 @@ class GridCarbonIntensity:
     """Grid carbon intensity data point"""
     location: str
     timestamp: datetime
-    carbon_intensity: float  # g CO2eq/kWh
+    carbon_intensity: float  # g CO2eq/kWh (or kg CO2/kWh if documented)
     renewable_share: Optional[float] = None
     source: Optional[str] = None
+    # Optional unit field for clarity (e.g., "g_CO2_per_kWh", "kg_CO2_per_kWh")
+    unit: Optional[str] = None
 
 
 class GridDataLoader:

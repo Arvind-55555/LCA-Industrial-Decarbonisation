@@ -1,20 +1,48 @@
-# AI-Enhanced Life Cycle Assessment for Industrial Decarbonisation
+# Indian Industrial Decarbonisation LCA Platform
 
-**A physics-informed deep learning platform for dynamic LCA modeling and optimization of decarbonisation technologies**
+**A machine learning-enhanced Life Cycle Assessment platform for Indian heavy industries**
 
 ---
 
-An advanced AI-driven system that dynamically models, optimizes, and validates life cycle emissions of green hydrogen, CCUS, electrification, and circular economy pathways across eight hard-to-abate industrial sectors. By integrating machine learning models (PINN, Transformer, GNN), real-time grid carbon intensity data, and physics-based constraints, this platform enables accurate, scenario-aware LCA optimization to accelerate the deployment of scalable decarbonisation technologies—helping bridge the 40% global emissions gap to net zero.
+An advanced AI-driven system specifically designed for Indian industrial decarbonisation, featuring physics-informed neural networks (PINNs), Transformer models, and Graph Neural Networks (GNNs) trained on Indian industrial data. The platform accounts for Indian-specific characteristics including regional grid carbon intensity variations, DRI process technologies, state-specific industrial policies, and local material supply chains to enable accurate LCA optimization for India's top heavy industries.
+
+---
+## Indian Industrial Focus
+
+This platform is specifically adapted for **Indian heavy industries**, with:
+
+- **Indian Data Integration**: Extracts process data from data.gov.in, CEA, CPCB, and Indian industrial portals
+- **Regional Grid Carbon Intensity**: State-specific carbon intensity tracking for Indian power grid
+- **Indian Process Technologies**: DRI (coal-based), Indian cement clinker ratios, aluminium smelting with high grid dependency
+- **State-Specific Constraints**: Accounts for regional variations, material availability, and policy constraints
+- **Transfer Learning**: Adapts global models to Indian context with limited data using physics-based regularization
+
+---
 
 ## Key Features
 
-- **ML-Enhanced LCA Calculations**: Physics-Informed Neural Networks (PINN) and Transformer models integrated for improved accuracy
-- **Real-Time Grid Integration**: Dynamic carbon intensity tracking with historical data analysis (7d, 30d, 1y, 3y, 5y)
-- **Sector-Specific Optimizers**: Specialized models for steel, cement, shipping, aluminium, and more
-- **Interactive Visualization Dashboard**: Comprehensive dashboards with ML-enhanced results and improvement opportunities
-- **Physics-Informed**: Ensures all predictions respect mass/energy balance and stoichiometric constraints
-- **Multi-Objective Optimization**: Balance emissions, cost, and technical feasibility
+- **Indian ML Model Training**: PINN, Transformer, and GNN models trained on Indian industrial data with data augmentation
+- **Indian Regional Grid Data**: State-specific carbon intensity for 18+ Indian states with seasonal variations
+- **Sector-Specific Indian Optimizers**: Steel (DRI), Cement, Aluminium, Chemicals, Refining with Indian process characteristics
+- **Physics-Informed Indian Constraints**: Accounts for grid reliability, material quality variations, climate conditions
+- **Transfer Learning & Data Augmentation**: Compensates for limited Indian data using physics-based regularization
+- **State-Specific Modeling**: Regional variations in material sourcing, grid reliability, and policy constraints
 
+---
+## Live Dashboard
+
+**Access the live dashboard on GitHub Pages:**
+🔗 [Dashboard](https://arvind-55555.github.io/LCA-Industrial-Decarbonisation/)
+
+The dashboard is automatically deployed when changes are pushed to the `main` branch.
+
+### Dashboard Features
+- **LCA Results**: ML-enhanced baseline vs optimized emissions
+- **Grid Carbon Intensity**: Interactive time-series analysis
+- **Sector Comparison**: Cross-sector optimization potential
+- **Charts & Images**: Generated LCA breakdown visualizations
+
+---
 ## Project Overview
 
 This system provides dynamic, high-resolution LCA modeling for:
@@ -23,16 +51,21 @@ This system provides dynamic, high-resolution LCA modeling for:
 - **Electrification**: System-wide impacts and optimization
 - **Recycling**: Circular economy integration
 
-## Industrial Sectors Covered
+## Indian Industrial Sectors Covered
 
-1. **Steel**: H₂-DRI optimization with electrolyzer pathway selection
-2. **Cement**: CCUS-integrated production with clinker substitution
-3. **Shipping & Aviation**: Hydrogen derivative fuel comparison (ammonia, methanol, e-fuels)
-4. **Aluminium**: Electrification with recycling loop optimization
-5. **Primary Chemicals**: Process decarbonisation pathways
-6. **Oil & Gas**: Upstream and downstream emission optimization
-7. **Trucking**: Fleet electrification with optimal charging schedules
-8. **Aviation**: Sustainable aviation fuel (SAF) pathway analysis
+1. **Steel**: Indian DRI processes (coal-based), BF-BOF, regional iron ore sourcing (Odisha/Jharkhand)
+2. **Cement**: Indian clinker ratios (0.65-0.85), fly ash/slag substitution, regional material availability
+3. **Aluminium**: High grid dependency (85%+), state-specific carbon intensity, captive power considerations
+4. **Chemicals**: Indian petrochemical processes with local feedstock variations
+5. **Refining**: Indian refinery operations with regional grid characteristics
+
+### Indian-Specific Characteristics Modeled
+
+- **Steel**: Lower quality iron ore (58-62% Fe), coal-based DRI dominance, grid reliability issues
+- **Cement**: Higher clinker ratios, limited fly ash availability in some regions, high coal dependency
+- **Aluminium**: Higher specific energy consumption (13.5-15.5 MWh/t), state grid variations, limited renewable capacity
+- **Grid**: 20% transmission losses, power quality issues, regional reliability variations
+- **Climate**: Monsoon impacts, heat wave effects, regional temperature variations
 
 ## Architecture
 
@@ -187,7 +220,11 @@ This will:
 
 ### Additional Tools
 
-- **Train ML Models**: `python train_models.py --data-dir data/sample --output-dir models/trained`
+- **Scrape Indian Data Automatically**: `python scripts/scrape_indian_data.py --source all` (downloads from open sources)
+- **Train Indian ML Models**: `python scripts/train_indian_models.py --sectors steel cement aluminium --states Maharashtra Gujarat`
+- **Prepare Manually Downloaded Data**: `python scripts/prepare_indian_data.py emissions <downloaded_file.csv>`
+- **Download Datasets**: `python scripts/download_datasets.py --dataset sample`
+- **Train Global Models**: `python train_models.py --data-dir data/sample --output-dir models/trained`
 - **Run API Server**: `python run_api.py`
 - **Generate Summary Report**: `python scripts/generate_visualization_summary.py`
 
@@ -198,23 +235,44 @@ This will:
 - `/lca/cement_ccus_optimization` - Cement CCUS optimization
 - `/lca/aluminium_electrification` - Aluminium electrification LCA
 
-### Example Usage
+### Example Usage: Indian Steel Sector
 
 ```python
 from lca_optimizer.core.engine import LCAEngine
-from lca_optimizer.sectors.steel import SteelH2DRIOptimizer, SteelProcessConfig
+from lca_optimizer.sectors.indian_steel import IndianSteelOptimizer, IndianSteelProcessConfig
 
 engine = LCAEngine()
-optimizer = SteelH2DRIOptimizer(engine)
+optimizer = IndianSteelOptimizer(engine, state="Maharashtra")
 
-config = SteelProcessConfig(
-    h2_pathway="electrolysis",
-    electrolyzer_type="PEM",
-    renewable_mix={"wind": 0.6, "solar": 0.4},
-    iron_ore_source="Australia",
-    process_heat_source="electric",
-    location="EU",
-    production_capacity=1000000.0
+config = IndianSteelProcessConfig(
+    process_type="DRI",
+    state="Maharashtra",
+    iron_ore_source="Odisha",
+    coal_type="Indian coal",
+    production_capacity=2000000.0,  # 2 million tonnes/year
+    grid_dependency=0.75
+)
+
+result = optimizer.optimize(config)
+print(f"Emission reduction: {result['emission_reduction']:.1f}%")
+print(f"Grid CI: {result['grid_ci']:.2f} kg CO2/kWh")
+print(f"Grid reliability: {result['indian_specific_factors']['grid_reliability']:.2f}")
+```
+
+### Example: Indian Cement Sector
+
+```python
+from lca_optimizer.sectors.indian_cement import IndianCementOptimizer, IndianCementProcessConfig
+
+optimizer = IndianCementOptimizer(engine, state="Rajasthan")
+
+config = IndianCementProcessConfig(
+    state="Rajasthan",
+    production_capacity=5000000.0,  # 5 million tonnes/year
+    clinker_ratio=0.75,
+    fly_ash_substitution=0.25,
+    capture_technology="post-combustion",
+    capture_rate=0.90
 )
 
 result = optimizer.optimize(config)
@@ -346,18 +404,7 @@ See [docs/VISUALIZATION_GUIDE.md](docs/VISUALIZATION_GUIDE.md) for detailed visu
 - **Production Deployment**: Deploy API to cloud infrastructure
 - **Model Serving**: Set up model inference service
 
-## Live Dashboard
 
-**Access the live dashboard on GitHub Pages:**
-🔗 [Dashboard](https://arvind-55555.github.io/LCA-Industrial-Decarbonisation/)
-
-The dashboard is automatically deployed when changes are pushed to the `main` branch.
-
-### Dashboard Features
-- **LCA Results**: ML-enhanced baseline vs optimized emissions
-- **Grid Carbon Intensity**: Interactive time-series analysis
-- **Sector Comparison**: Cross-sector optimization potential
-- **Charts & Images**: Generated LCA breakdown visualizations
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for deployment details.
 

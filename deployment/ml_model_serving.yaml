@@ -1,0 +1,133 @@
+# ML Model Serving Configuration for Indian Industrial Decarbonisation Platform
+# Supports TensorFlow Serving, TorchServe, and custom FastAPI serving
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: indian-lca-ml-config
+  namespace: lca-optimizer
+data:
+  # Model paths
+  PINN_MODEL_PATH: "/models/indian/steel_pinn.pt"
+  TRANSFORMER_MODEL_PATH: "/models/indian/steel_transformer.pt"
+  GNN_MODEL_PATH: "/models/indian/steel_gnn.pt"
+  
+  # Model serving configuration
+  MODEL_SERVING_TYPE: "torchserve"  # torchserve, tensorflow-serving, fastapi
+  BATCH_SIZE: "32"
+  MAX_SEQUENCE_LENGTH: "100"
+  
+  # Indian-specific settings
+  DEFAULT_STATE: "Maharashtra"
+  ENABLE_TRANSFER_LEARNING: "true"
+  PHYSICS_REGULARIZATION_WEIGHT: "0.15"
+  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: indian-lca-ml-serving
+  namespace: lca-optimizer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: indian-lca-ml-serving
+  template:
+    metadata:
+      labels:
+        app: indian-lca-ml-serving
+    spec:
+      containers:
+      - name: torchserve
+        image: pytorch/torchserve:latest
+        ports:
+        - containerPort: 8080
+        - containerPort: 8081
+        env:
+        - name: MODEL_STORE
+          value: "/models"
+        - name: WORKERS
+          value: "2"
+        volumeMounts:
+        - name: model-storage
+          mountPath: /models
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "2"
+          limits:
+            memory: "8Gi"
+            cpu: "4"
+      
+      - name: fastapi-server
+        image: indian-lca-optimizer:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: MODEL_DIR
+          value: "/models/indian"
+        - name: INDIAN_DATA_DIR
+          value: "/data/indian"
+        volumeMounts:
+        - name: model-storage
+          mountPath: /models
+        - name: data-storage
+          mountPath: /data
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1"
+          limits:
+            memory: "4Gi"
+            cpu: "2"
+      
+      volumes:
+      - name: model-storage
+        persistentVolumeClaim:
+          claimName: ml-models-pvc
+      - name: data-storage
+        persistentVolumeClaim:
+          claimName: indian-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: indian-lca-ml-service
+  namespace: lca-optimizer
+spec:
+  selector:
+    app: indian-lca-ml-serving
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+  - name: torchserve
+    port: 8080
+    targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ml-models-pvc
+  namespace: lca-optimizer
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: indian-data-pvc
+  namespace: lca-optimizer
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+

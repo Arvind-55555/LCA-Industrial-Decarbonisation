@@ -1,0 +1,2 @@
+state,smelting_technology,specific_energy_consumption_mwh_per_tonne,emission_factor_tco2_per_tonne,grid_carbon_intensity_kg_co2_per_kwh,production_capacity_tonnes_per_year,power_source,renewable_share
+Odisha,Pre-baked anode,13.72573490963721,11.037174478290321,1.0004850585178253,1723092.3227509703,State grid + captive power,0.08084473996259338

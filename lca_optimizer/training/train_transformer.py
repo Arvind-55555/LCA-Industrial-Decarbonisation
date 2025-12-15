@@ -81,10 +81,17 @@ def train_transformer_model(
             
             # Forward pass
             optimizer.zero_grad()
-            y_pred = model(X_batch)
+            y_pred = model(X_batch)  # (batch, seq_len, 1)
             
-            # Loss
-            loss = criterion(y_pred, y_batch)
+            # For forecasting, we predict the next timestep
+            # Use last timestep of prediction if target is single value
+            if y_batch.dim() == 2 and y_batch.shape[1] == 1:
+                # Target is (batch, 1), use last timestep of prediction
+                y_pred_last = y_pred[:, -1, :]  # (batch, 1)
+                loss = criterion(y_pred_last, y_batch)
+            else:
+                # Target matches prediction shape
+                loss = criterion(y_pred, y_batch)
             
             # Backward pass
             loss.backward()
@@ -100,8 +107,14 @@ def train_transformer_model(
         if val_data is not None:
             model.eval()
             with torch.no_grad():
-                y_val_pred = model(val_data["X"])
-                val_loss = criterion(y_val_pred, val_data["y"]).item()
+                y_val_pred = model(val_data["X"])  # (batch, seq_len, 1)
+                y_val = val_data["y"]
+                # Use last timestep if target is single value
+                if y_val.dim() == 2 and y_val.shape[1] == 1:
+                    y_val_pred_last = y_val_pred[:, -1, :]  # (batch, 1)
+                    val_loss = criterion(y_val_pred_last, y_val).item()
+                else:
+                    val_loss = criterion(y_val_pred, y_val).item()
                 history["val_loss"].append(val_loss)
             model.train()
         

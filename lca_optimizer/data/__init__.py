@@ -9,6 +9,16 @@ from lca_optimizer.data.greet_integration import GREETIntegration
 from lca_optimizer.data.api_client import APIClient
 from lca_optimizer.data.download_utils import DatasetDownloader
 
+# Indian data loaders
+try:
+    from lca_optimizer.data.indian_data_loader import IndianDataLoader
+    from lca_optimizer.data.indian_grid_data import IndianGridDataLoader
+    INDIAN_DATA_AVAILABLE = True
+except ImportError:
+    INDIAN_DATA_AVAILABLE = False
+    IndianDataLoader = None
+    IndianGridDataLoader = None
+
 __all__ = [
     "LCILoader",
     "GridDataLoader",
@@ -18,5 +28,8 @@ __all__ = [
     "LocalGridDataLoader",
     "GREETIntegration",
     "APIClient",
-    "DatasetDownloader"
+    "DatasetDownloader",
 ]
+
+if INDIAN_DATA_AVAILABLE:
+    __all__.extend(["IndianDataLoader", "IndianGridDataLoader"])

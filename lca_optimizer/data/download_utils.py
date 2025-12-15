@@ -243,6 +243,54 @@ class DatasetDownloader:
         logger.info(f"Created sample grid data: {filepath}")
         return filepath
 
+    def download_indian_emissions_from_datagov(
+        self,
+        dataset_id: str,
+        resource_id: Optional[str] = None,
+        force: bool = False
+    ) -> Optional[Path]:
+        """
+        Download Indian industrial emissions data from data.gov.in.
+
+        This uses the DATAGOV_API_KEY environment variable and stores the
+        raw records plus a CSV in data/raw/indian/.
+
+        NOTE: The exact schema depends on the chosen dataset. You may need
+        to post-process the raw CSV into the standard format expected by
+        IndianDataLoader (sector, state, year, emissions_tco2,
+        production_tonnes, energy_consumption_mwh, grid_carbon_intensity).
+        """
+        from lca_optimizer.data.indian_data_loader import IndianDataLoader
+
+        indian_dir = self.data_dir / "indian"
+        loader = IndianDataLoader(data_dir=str(indian_dir))
+
+        # If we already have industrial_emissions.csv and not forcing, reuse it
+        emissions_file = indian_dir / "industrial_emissions.csv"
+        if emissions_file.exists() and not force:
+            logger.info(f"Indian industrial_emissions.csv already exists: {emissions_file}")
+            return emissions_file
+
+        df = loader.download_data_gov_in_dataset(
+            dataset_id=dataset_id,
+            resource_id=resource_id,
+            force_download=force
+        )
+
+        if df is None or df.empty:
+            logger.warning("No data downloaded from data.gov.in; keeping existing sample emissions (if any).")
+            return None
+
+        # Save raw data for inspection
+        raw_path = indian_dir / f"datagov_{dataset_id}_raw.csv"
+        df.to_csv(raw_path, index=False)
+        logger.info(f"Saved raw Indian emissions data to {raw_path}")
+
+        # For now we do not attempt to auto-map arbitrary schemas into the
+        # standard industrial_emissions.csv. The user can transform raw_path
+        # manually into industrial_emissions.csv if needed.
+        return raw_path
+
 
 def download_all_datasets(data_dir: str = "data/raw"):
     """

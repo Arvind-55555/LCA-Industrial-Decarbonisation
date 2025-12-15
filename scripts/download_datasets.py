@@ -26,9 +26,21 @@ def main():
     parser.add_argument(
         "--dataset",
         type=str,
-        choices=["all", "egrid", "opsd", "sample"],
+        choices=["all", "egrid", "opsd", "sample", "indian"],
         default="all",
         help="Dataset to download"
+    )
+    parser.add_argument(
+        "--datagov-dataset-id",
+        type=str,
+        default=None,
+        help="data.gov.in dataset_id for Indian emissions (required for --dataset indian)"
+    )
+    parser.add_argument(
+        "--datagov-resource-id",
+        type=str,
+        default=None,
+        help="Optional data.gov.in resource_id for Indian emissions"
     )
     parser.add_argument(
         "--force",
@@ -67,6 +79,22 @@ def main():
             end_date=datetime.now()
         )
         print(f"✅ Created: {path}")
+    elif args.dataset == "indian":
+        print("Downloading Indian industrial emissions data from data.gov.in...")
+        if not args.datagov_dataset_id:
+            print("❌ --datagov-dataset-id is required for --dataset indian")
+            print("   Example: --datagov-dataset-id your_dataset_id_here")
+            return
+        path = downloader.download_indian_emissions_from_datagov(
+            dataset_id=args.datagov_dataset_id,
+            resource_id=args.datagov_resource_id,
+            force=args.force
+        )
+        if path:
+            print(f"✅ Downloaded raw Indian emissions data to: {path}")
+            print("   Please inspect and, if needed, transform it into 'data/raw/indian/industrial_emissions.csv'")
+        else:
+            print("❌ Download failed or returned no data. Check DATAGOV_API_KEY and dataset IDs.")
 
 
 if __name__ == "__main__":

@@ -6,7 +6,24 @@ from lca_optimizer.models.transformer import LCATransformer
 # GNN requires torch_geometric, make it optional
 try:
     from lca_optimizer.models.gnn import ProcessGNN
-    __all__ = ["PhysicsInformedNN", "ProcessGNN", "LCATransformer"]
+    GNN_AVAILABLE = True
 except ImportError:
-    __all__ = ["PhysicsInformedNN", "LCATransformer"]
+    GNN_AVAILABLE = False
+    ProcessGNN = None
+
+# Indian-specific models
+try:
+    from lca_optimizer.models.indian_pinn import IndianPhysicsInformedNN
+    INDIAN_MODELS_AVAILABLE = True
+except ImportError:
+    INDIAN_MODELS_AVAILABLE = False
+    IndianPhysicsInformedNN = None
+
+__all__ = ["PhysicsInformedNN", "LCATransformer"]
+
+if GNN_AVAILABLE:
+    __all__.append("ProcessGNN")
+
+if INDIAN_MODELS_AVAILABLE:
+    __all__.append("IndianPhysicsInformedNN")
 

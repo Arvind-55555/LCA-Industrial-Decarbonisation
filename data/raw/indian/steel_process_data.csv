@@ -1,0 +1,3 @@
+state,process_type,iron_ore_source,coal_type,dri_capacity_tonnes_per_year,specific_energy_consumption_mwh_per_tonne,emission_factor_tco2_per_tonne,grid_dependency,renewable_share
+Maharashtra,DRI,Odisha/Jharkhand,Indian coal,1745184.6455881875,3.419276191788791,2.0318328746645404,0.7915889214208717,0.12542214747570102
+Maharashtra,BF-BOF,Odisha/Jharkhand,Indian coking coal,3396694.3558299895,4.294950449022574,2.4649111616028683,0.5045314900393034,0.07193400238495032
